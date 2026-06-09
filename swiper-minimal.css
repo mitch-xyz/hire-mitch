@@ -1,0 +1,121 @@
+/**
+ * Minimal Swiper CSS — only functional styles for slider mechanics.
+ * We intentionally skip swiper/css core which sets layout properties
+ * (overflow, width, height, position, display) that conflict with
+ * builder Tailwind classes. Matches the legacy ycode approach.
+ */
+
+.swiper-button-lock { display: none !important; }
+.swiper:not(.swiper-cube) .swiper-cube-shadow { display: none !important; }
+
+.swiper-horizontal { touch-action: pan-y; }
+.swiper-vertical { touch-action: pan-x; }
+.swiper-slide-invisible-blank { visibility: hidden; }
+
+.swiper-autoheight,
+.swiper-autoheight .swiper-slide { height: auto; }
+.swiper-autoheight .swiper-wrapper {
+  align-items: flex-start;
+  transition-property: transform, height;
+}
+
+.swiper-backface-hidden .swiper-slide {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 3D effects */
+.swiper-3d.swiper-css-mode .swiper-wrapper { perspective: 1200px; }
+.swiper-3d .swiper-wrapper { transform-style: preserve-3d; }
+.swiper-3d { perspective: 1200px; }
+.swiper-3d .swiper-slide,
+.swiper-3d .swiper-slide-shadow,
+.swiper-3d .swiper-slide-shadow-left,
+.swiper-3d .swiper-slide-shadow-right,
+.swiper-3d .swiper-slide-shadow-top,
+.swiper-3d .swiper-slide-shadow-bottom,
+.swiper-3d .swiper-cube-shadow { transform-style: preserve-3d; }
+.swiper-3d .swiper-slide-shadow,
+.swiper-3d .swiper-slide-shadow-left,
+.swiper-3d .swiper-slide-shadow-right,
+.swiper-3d .swiper-slide-shadow-top,
+.swiper-3d .swiper-slide-shadow-bottom {
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 10;
+}
+.swiper-3d .swiper-slide-shadow { background: rgba(0,0,0,0.15); }
+.swiper-3d .swiper-slide-shadow-left { background-image: linear-gradient(to left, rgba(0,0,0,0.5), rgba(0,0,0,0)); }
+.swiper-3d .swiper-slide-shadow-right { background-image: linear-gradient(to right, rgba(0,0,0,0.5), rgba(0,0,0,0)); }
+.swiper-3d .swiper-slide-shadow-top { background-image: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0)); }
+.swiper-3d .swiper-slide-shadow-bottom { background-image: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0)); }
+
+/* CSS mode */
+.swiper-css-mode > .swiper-wrapper {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.swiper-css-mode > .swiper-wrapper::-webkit-scrollbar { display: none; }
+.swiper-css-mode > .swiper-wrapper > .swiper-slide { scroll-snap-align: start start; }
+.swiper-horizontal.swiper-css-mode > .swiper-wrapper { scroll-snap-type: x mandatory; }
+.swiper-vertical.swiper-css-mode > .swiper-wrapper { scroll-snap-type: y mandatory; }
+.swiper-css-mode.swiper-free-mode > .swiper-wrapper { scroll-snap-type: none; }
+.swiper-css-mode.swiper-free-mode > .swiper-wrapper > .swiper-slide { scroll-snap-align: none; }
+
+/* Centered */
+.swiper-centered > .swiper-wrapper::before { content: ''; flex-shrink: 0; order: 9999; }
+.swiper-centered > .swiper-wrapper > .swiper-slide { scroll-snap-align: center center; scroll-snap-stop: always; }
+.swiper-centered.swiper-horizontal > .swiper-wrapper > .swiper-slide:first-child { margin-inline-start: var(--swiper-centered-offset-before); }
+.swiper-centered.swiper-horizontal > .swiper-wrapper::before { height: 100%; min-height: 1px; width: var(--swiper-centered-offset-after); }
+.swiper-centered.swiper-vertical > .swiper-wrapper > .swiper-slide:first-child { margin-block-start: var(--swiper-centered-offset-before); }
+.swiper-centered.swiper-vertical > .swiper-wrapper::before { width: 100%; min-width: 1px; height: var(--swiper-centered-offset-after); }
+
+/* Effect: Fade */
+.swiper-fade.swiper-free-mode .swiper-slide { transition-timing-function: ease-out; }
+.swiper-fade .swiper-slide { pointer-events: none; transition-property: opacity; }
+.swiper-fade .swiper-slide .swiper-slide { pointer-events: none; }
+.swiper-fade .swiper-slide-active { pointer-events: auto; }
+.swiper-fade .swiper-slide-active .swiper-slide-active { pointer-events: auto; }
+
+/* Effect: Cube */
+.swiper-cube { overflow: visible; }
+.swiper-cube .swiper-slide {
+  pointer-events: none; backface-visibility: hidden;
+  z-index: 1; visibility: hidden; transform-origin: 0 0;
+  width: 100%; height: 100%;
+}
+.swiper-cube .swiper-slide .swiper-slide { pointer-events: none; }
+.swiper-cube.swiper-rtl .swiper-slide { transform-origin: 100% 0; }
+.swiper-cube .swiper-slide-active,
+.swiper-cube .swiper-slide-active .swiper-slide-active { pointer-events: auto; }
+.swiper-cube .swiper-slide-active,
+.swiper-cube .swiper-slide-next,
+.swiper-cube .swiper-slide-prev { pointer-events: auto; visibility: visible; }
+.swiper-cube .swiper-cube-shadow {
+  position: absolute; left: 0; bottom: 0;
+  width: 100%; height: 100%; opacity: 0.6; z-index: 0;
+}
+.swiper-cube .swiper-cube-shadow:before {
+  content: ''; background: #000;
+  position: absolute; left: 0; top: 0; bottom: 0; right: 0;
+  filter: blur(50px);
+}
+
+/* Effect: Flip */
+.swiper-flip { overflow: visible; }
+.swiper-flip .swiper-slide {
+  pointer-events: none; backface-visibility: hidden; z-index: 1;
+}
+.swiper-flip .swiper-slide .swiper-slide { pointer-events: none; }
+.swiper-flip .swiper-slide-active,
+.swiper-flip .swiper-slide-active .swiper-slide-active { pointer-events: auto; }
+
+/* Effect: Coverflow */
+.swiper-coverflow .swiper-wrapper { perspective: 1200px; }
+
+/* Effect: Cards */
+.swiper-cards { overflow: visible; }
+.swiper-cards .swiper-slide {
+  transform-origin: center bottom; backface-visibility: hidden; overflow: hidden;
+}
