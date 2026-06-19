@@ -1,0 +1,47 @@
+name: Fix CMS links and contact form
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.html"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fix-cms-links-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    # Don't run on the bot's own commit, to avoid a loop.
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Repair export (slug links, contact form, #contact anchor)
+        run: node .github/scripts/fix-links.js . 2>&1 | tee /tmp/report.txt
+
+      - name: Commit and push if anything changed
+        run: |
+          if ! grep -q "CHANGES_MADE=1" /tmp/report.txt; then
+            echo "Nothing to fix - clean export."
+            exit 0
+          fi
+          PROJECTS=$(grep '✓' /tmp/report.txt | sed -E 's/.*✓ (.*) -> .*/\1/' | paste -sd ', ' -)
+          if [ -n "$PROJECTS" ]; then
+            MSG="Fix broken slug links for: ${PROJECTS}"
+          else
+            MSG="Fix Ycode export (contact form / anchors)"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "$MSG"
+          git push
