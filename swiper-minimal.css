@@ -12,6 +12,32 @@
 .swiper-vertical { touch-action: pan-x; }
 .swiper-slide-invisible-blank { visibility: hidden; }
 
+/*
+ * Slides default to Tailwind `w-full` (width:100%). When the slider sits in a
+ * shrink-to-fit context (e.g. an `align-items:center` flex parent, or an
+ * `aspect-ratio` wrapper with no definite width), the percentage-width chain
+ * becomes circular: the slider blows up to the browser max width, Swiper
+ * measures that and sizes every slide to it, and any `aspect-ratio` ancestor
+ * amplifies it into a runaway height too. `contain: inline-size` decouples the
+ * slider's own width from its (inflated) contents, so it resolves from its
+ * containing block or an aspect-ratio ancestor instead — breaking the cycle
+ * without forcing a width. Explicit widths still win. Applies in both the
+ * canvas and published output.
+ */
+.swiper { contain: inline-size; }
+
+/*
+ * Slides default to Tailwind `h-full` (height:100%). When the slider itself has
+ * no definite height (e.g. `h-[100%]` on tablet/mobile), the percentage-height
+ * chain becomes circular and slides collapse to 0 — the first slide appears
+ * blank. Auto height lets flexbox stretch every slide to the tallest one, which
+ * still fills a definite-height container (e.g. desktop `h-[600px]`) identically.
+ * Effect sliders (cube/flip/cards/3D) keep their own explicit height rules.
+ */
+.swiper:not(.swiper-cube):not(.swiper-flip):not(.swiper-cards):not(.swiper-3d) > .swiper-wrapper > .swiper-slide {
+  height: auto;
+}
+
 .swiper-autoheight,
 .swiper-autoheight .swiper-slide { height: auto; }
 .swiper-autoheight .swiper-wrapper {
