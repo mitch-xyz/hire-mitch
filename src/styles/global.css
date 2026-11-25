@@ -7,5 +7,14 @@
   --color-ink: #000000;
 }
 
+@layer base {
+  /* Always a white page, even when the browser/OS is in dark mode */
+  html {
+    color-scheme: light;
+    background-color: #ffffff;
+    color: var(--color-ink);
+  }
+}
+
 /* Ycode's `current:` variant */
 @custom-variant current (&[aria-current]);
