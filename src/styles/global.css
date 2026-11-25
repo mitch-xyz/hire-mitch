@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "@fontsource-variable/sora";
+
+@theme {
+  --font-sora: "Sora Variable", "Sora", sans-serif;
+  /* Was the Ycode color variable --8c77d818-1b9b-426b-bdeb-f0c9918431c3 */
+  --color-ink: #000000;
+}
+
+/* Ycode's `current:` variant */
+@custom-variant current (&[aria-current]);

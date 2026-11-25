@@ -1,23 +1,81 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Skip the site header/footer and Sora font (used by error pages). */
+  bare?: boolean;
+}
+
+const { title, description, bare = false } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const hasFooterContent = Astro.slots.has('footer');
+// The site title is the page's <h1> only on the homepage; project pages have their own.
+const SiteTitle = isHome ? 'h1' : 'p';
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <slot name="head" />
+  </head>
+  <body class:list={[!bare && 'font-sora']}>
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <>
+          <header class="flex flex-col items-center w-full pt-16 max-lg:pt-8">
+            <div class="flex flex-col w-full px-8 max-w-[1280px] max-md:px-4">
+              <nav class="flex flex-row justify-between items-start gap-4 w-full max-lg:flex-col max-lg:gap-6">
+                <a
+                  class="flex flex-col gap-4 max-lg:gap-2"
+                  href="/"
+                  aria-current={isHome ? 'page' : undefined}
+                >
+                  <SiteTitle class="tracking-[-0.02em] text-[56px] leading-[1.1] max-lg:text-[36px] max-md:text-[28px] font-bold">
+                    Portfolio of Mitchell Durr
+                  </SiteTitle>
+                  <p class="text-ink/60 text-[24px] max-lg:text-[20px] max-md:text-[18px]">
+                    Graphic Designer &amp; Web Designer
+                  </p>
+                </a>
+                <div class="flex flex-col mt-2">
+                  <a class="flex flex-row items-center justify-center py-2 text-ink text-[1.25rem] font-bold" href="/#contact">
+                    CONTACT ME
+                  </a>
+                </div>
+              </nav>
+            </div>
+          </header>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+          <main>
+            <slot />
+          </main>
+
+          <footer
+            id={hasFooterContent ? 'contact' : undefined}
+            class="flex flex-col items-center w-full py-20 max-md:pt-[74px] max-md:pb-12"
+          >
+            <div class="flex flex-col w-full px-8 max-w-[1280px] max-md:px-4">
+              <slot name="footer" />
+              <div class="flex flex-col mt-6">
+                <p class="text-[16px] mt-16 text-center">
+                  Copyright © {new Date().getFullYear()} Mitch Durr. All Rights Reserved.
+                </p>
+              </div>
+            </div>
+          </footer>
+        </>
+      )
+    }
+  </body>
+</html>

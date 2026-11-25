@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import gradientDither from '../assets/gradient-dither.webp';
+
+const fieldLabel = 'block font-medium text-[#404040] tracking-tight leading-6 text-[1.125rem]';
+const fieldBase =
+  'w-full px-4 leading-6 text-[#171717] text-[1.125rem] bg-white border border-solid border-ink placeholder:text-[#a8a8a8] focus:outline-none focus:border-[#737373]/20 disabled:opacity-50 cursor-text';
+---
+
+<div class="relative isolate flex flex-col mb-6 pt-[110px] px-[60px] max-md:pt-[68px] max-md:px-6">
+  <Image
+    src={gradientDither}
+    alt=""
+    aria-hidden="true"
+    widths={[640, 1280, gradientDither.width].filter((w) => w <= gradientDither.width)}
+    sizes="(max-width: 1280px) 100vw, 1216px"
+    class="absolute inset-x-0 top-0 -z-10 w-full h-auto"
+  />
+
+  <div class="flex flex-col mb-6">
+    <h2 class="text-[48px] font-bold leading-[1.1] tracking-[-0.01em] text-center max-md:text-[32px]">Contact Me</h2>
+  </div>
+
+  <!-- Netlify Forms: detected at deploy time from the built HTML -->
+  <form
+    class="flex flex-col gap-8 w-full items-center"
+    method="POST"
+    name="contact"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+  >
+    <input type="hidden" name="form-name" value="contact" />
+    <p hidden>
+      <label>Leave this field empty: <input name="bot-field" /></label>
+    </p>
+
+    <label class="flex flex-col gap-1 w-full">
+      <span class={fieldLabel}>Name</span>
+      <input class:list={[fieldBase, 'rounded py-6 h-[38px]']} name="name" type="text" required placeholder="Full Name" autocomplete="name" />
+    </label>
+    <label class="flex flex-col gap-1 w-full">
+      <span class={fieldLabel}>Email</span>
+      <input class:list={[fieldBase, 'rounded py-6 h-[38px]']} name="email" type="email" required placeholder="Email" autocomplete="email" />
+    </label>
+    <label class="flex flex-col gap-1 w-full">
+      <span class={fieldLabel}>Message</span>
+      <textarea class:list={[fieldBase, 'py-5']} name="message" rows="4" required placeholder="Message"></textarea>
+    </label>
+
+    <button class="flex flex-col items-center justify-center px-4 py-7 h-[38px] rounded-xl bg-[#171717] text-white text-[1.25rem] cursor-pointer" type="submit">
+      Submit
+    </button>
+  </form>
+</div>

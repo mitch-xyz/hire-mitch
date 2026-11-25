@@ -1,11 +1,42 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import ProjectCard from '../components/ProjectCard.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { projects } from '../data/projects';
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  title="Design Portfolio of Mitch Durr"
+  description="Portfolio of Mitch Durr, graphic designer and web designer"
+>
+  <section class="flex flex-col items-center w-full bg-white py-[140px] max-lg:py-[100px] max-md:pb-[70px]">
+    <div class="flex flex-col w-full px-8 max-w-[1280px] max-md:px-4">
+      <div class="flex flex-col w-full gap-20 max-lg:gap-12 max-md:gap-8">
+        {projects.map((project, i) => <ProjectCard project={project} eager={i === 0} />)}
+      </div>
+    </div>
+  </section>
+
+  <ContactForm slot="footer" />
 </Layout>
+
+<script>
+  import Lenis from 'lenis';
+
+  const lenis = new Lenis({
+    duration: 1.01,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 1,
+    anchors: true,
+  });
+
+  function raf(time: number) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+</script>

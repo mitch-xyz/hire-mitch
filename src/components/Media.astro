@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import type { Media } from '../data/projects';
+
+interface Props {
+  media: Media;
+  alt: string;
+  class?: string;
+  /** Load eagerly (e.g. the first image above the fold). */
+  eager?: boolean;
+}
+
+const { media, alt, class: className, eager = false } = Astro.props;
+---
+
+{
+  media.type === 'image' ? (
+    <Image
+      src={media.src}
+      alt={alt}
+      class={className}
+      widths={[384, 640, 1024, 1536, 1920].filter((w) => w <= media.src.width)}
+      sizes="(max-width: 1280px) 100vw, 1216px"
+      quality={85}
+      loading={eager ? 'eager' : 'lazy'}
+    />
+  ) : (
+    <video
+      class={className}
+      src={media.src}
+      aria-label={alt}
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+    />
+  )
+}

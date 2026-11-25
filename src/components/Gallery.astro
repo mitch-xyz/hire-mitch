@@ -1,0 +1,118 @@
+---
+import type { Media as MediaItem } from '../data/projects';
+import Media from './Media.astro';
+
+interface Props {
+  items: MediaItem[];
+  title: string;
+}
+
+const { items, title } = Astro.props;
+const showControls = items.length > 1;
+---
+
+<div class="gallery swiper relative flex w-full overflow-hidden" data-gallery>
+  <div class="swiper-wrapper flex w-full h-full items-stretch">
+    {
+      items.map((item, i) => (
+        <div class="swiper-slide shrink-0 w-full flex flex-col items-center justify-center">
+          <Media
+            media={item}
+            alt={`${title} — image ${i + 1} of ${items.length}`}
+            class:list={['w-full h-full object-cover', item.type === 'video' ? 'aspect-video' : 'aspect-[16/10]']}
+            eager={i === 0}
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    showControls && (
+      <>
+        <button
+          type="button"
+          data-gallery-prev
+          aria-label="Previous slide"
+          class="absolute inset-y-0 left-0 z-10 flex items-center justify-center pl-8 cursor-pointer"
+        >
+          <span class="flex items-center justify-center rounded-full bg-black size-9 text-white">
+            <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </button>
+        <button
+          type="button"
+          data-gallery-next
+          aria-label="Next slide"
+          class="absolute inset-y-0 right-0 z-10 flex items-center justify-center pr-8 cursor-pointer"
+        >
+          <span class="flex items-center justify-center rounded-full bg-black size-9 text-white">
+            <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </button>
+        <div class="absolute bottom-4 inset-x-0 z-10 flex items-center justify-center">
+          <div data-gallery-pagination class="flex items-center justify-center gap-1 p-2 rounded-full bg-black/50" />
+        </div>
+      </>
+    )
+  }
+</div>
+
+<style is:global>
+  /* Swiper's functional rules only; layout comes from the Tailwind classes above. */
+  .gallery {
+    contain: inline-size;
+  }
+  .gallery > .swiper-wrapper > .swiper-slide {
+    height: auto;
+  }
+  .gallery .swiper-button-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .gallery .swiper-button-lock {
+    display: none;
+  }
+  .gallery .gallery-bullet {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 8px;
+    background: #fff;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+  .gallery .gallery-bullet.swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination } from 'swiper/modules';
+
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((el) => {
+    new Swiper(el, {
+      modules: [Navigation, Pagination],
+      slidesPerView: 1,
+      speed: 500,
+      allowTouchMove: true,
+      navigation: {
+        prevEl: el.querySelector<HTMLElement>('[data-gallery-prev]'),
+        nextEl: el.querySelector<HTMLElement>('[data-gallery-next]'),
+      },
+      pagination: {
+        el: el.querySelector<HTMLElement>('[data-gallery-pagination]'),
+        clickable: true,
+        bulletClass: 'gallery-bullet',
+        bulletElement: 'button',
+      },
+    });
+    const wrapper = el.querySelector<HTMLElement>('.swiper-wrapper');
+    if (wrapper) wrapper.style.transitionTimingFunction = 'ease-in-out';
+  });
+</script>
