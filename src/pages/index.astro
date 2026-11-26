@@ -1,8 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { projects } from '../data/projects';
+
+const entries = await getCollection('projects');
+const projects = entries
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => ({ slug: entry.id, ...entry.data }));
 ---
 
 <Layout
@@ -10,8 +15,8 @@ import { projects } from '../data/projects';
   description="Portfolio of Mitch Durr, graphic designer and web designer"
 >
   <section class="flex flex-col items-center w-full bg-white py-[140px] max-lg:py-[100px] max-md:pb-[70px]">
-    <div class="flex flex-col w-full px-8 max-w-[1280px] max-md:px-4">
-      <div class="flex flex-col w-full gap-20 max-lg:gap-12 max-md:gap-8">
+    <div class="page-container">
+      <div class="flex flex-col w-full gap-20 max-lg:gap-12 max-md:gap-8" role="list">
         {projects.map((project, i) => <ProjectCard project={project} eager={i === 0} />)}
       </div>
     </div>

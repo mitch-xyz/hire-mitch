@@ -1,25 +1,30 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Gallery from '../components/Gallery.astro';
-import { projects } from '../data/projects';
 
-// One page per project, at /<slug>/ — generated from src/data/projects.ts.
-export const getStaticPaths = (() =>
-  projects.map((project) => ({ params: { slug: project.slug }, props: { project } }))) satisfies GetStaticPaths;
+// One page per project, at /<slug>/ — generated from src/content/projects.
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('projects');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { project: { slug: entry.id, ...entry.data } },
+  }));
+}) satisfies GetStaticPaths;
 
 const { project } = Astro.props;
 ---
 
 <Layout title={`${project.title} - Projects`}>
   <section class="flex flex-col items-center w-full bg-white py-[140px] max-lg:py-[100px] max-md:pb-[70px]">
-    <div class="flex flex-col w-full px-8 max-w-[1280px] max-md:px-4">
+    <div class="page-container">
       <div class="flex flex-col items-center w-full gap-[72px] max-md:gap-6">
         <div class="flex flex-col items-center gap-4 w-full max-w-[680px]">
-          <h1 class="font-bold tracking-[-0.02em] text-[56px] leading-[1.1] text-center max-lg:text-[48px] max-md:text-[32px]">
+          <h1 class="font-bold tracking-[-0.02em] text-display text-center max-lg:text-5xl max-md:text-[32px]">
             {project.title}
           </h1>
-          <p class="text-[18px] text-ink/60 text-center">{project.tagline}</p>
+          <p class="text-lg text-ink/60 text-center">{project.tagline}</p>
         </div>
         <div class="flex flex-col w-full">
           <Gallery items={project.gallery} title={project.title} />

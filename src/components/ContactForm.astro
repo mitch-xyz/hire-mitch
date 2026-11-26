@@ -2,9 +2,9 @@
 import { Image } from 'astro:assets';
 import gradientDither from '../assets/gradient-dither.webp';
 
-const fieldLabel = 'block font-medium text-[#404040] tracking-tight leading-6 text-[1.125rem]';
+const fieldLabel = 'block font-medium text-ink-label tracking-tight leading-6 text-lg';
 const fieldBase =
-  'w-full px-4 leading-6 text-[#171717] text-[1.125rem] bg-white border border-solid border-ink placeholder:text-[#a8a8a8] focus:outline-none focus:border-[#737373]/20 disabled:opacity-50 cursor-text';
+  'w-full px-4 leading-6 text-ink text-lg bg-white border border-solid border-ink placeholder:text-ink-placeholder focus:outline-none focus:border-ink-border-hover/20 disabled:opacity-50 cursor-text';
 ---
 
 <div class="relative isolate flex flex-col mb-6 pt-[110px] px-[60px] max-md:pt-[68px] max-md:px-6">
@@ -18,7 +18,7 @@ const fieldBase =
   />
 
   <div class="flex flex-col mb-6">
-    <h2 class="text-[48px] font-bold leading-[1.1] tracking-[-0.01em] text-center max-md:text-[32px]">Contact Me</h2>
+    <h2 class="text-5xl font-bold leading-[1.1] tracking-[-0.01em] text-center max-md:text-[32px]">Contact Me</h2>
   </div>
 
   <!-- Netlify Forms: detected at deploy time from the built HTML -->
@@ -47,7 +47,7 @@ const fieldBase =
       <textarea class:list={[fieldBase, 'py-5']} name="message" rows="4" required placeholder="Message"></textarea>
     </label>
 
-    <button class="flex flex-col items-center justify-center px-4 py-7 h-[38px] rounded-xl bg-[#171717] text-white text-[1.25rem] cursor-pointer" type="submit">
+    <button class="flex flex-col items-center justify-center px-4 py-7 h-[38px] rounded-xl bg-ink text-white text-xl cursor-pointer" type="submit">
       Submit
     </button>
   </form>

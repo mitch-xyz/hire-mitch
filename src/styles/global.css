@@ -3,8 +3,17 @@
 
 @theme {
   --font-sora: "Sora Variable", "Sora", sans-serif;
-  /* Was the Ycode color variable --8c77d818-1b9b-426b-bdeb-f0c9918431c3 */
+
+  /* Brand color: near-black text and UI elements across the site */
   --color-ink: #000000;
+  /* Contact form field tones */
+  --color-ink-label: #404040;
+  --color-ink-placeholder: #a8a8a8;
+  --color-ink-border-hover: #737373;
+
+  /* Hero/page-title size, above Tailwind's default type scale */
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.1;
 }
 
 @layer base {
@@ -16,5 +25,7 @@
   }
 }
 
-/* Ycode's `current:` variant */
-@custom-variant current (&[aria-current]);
+/* Shared page-width wrapper used by the header, footer, and every page's main section. */
+@utility page-container {
+  @apply flex flex-col w-full px-8 max-w-7xl max-md:px-4;
+}
